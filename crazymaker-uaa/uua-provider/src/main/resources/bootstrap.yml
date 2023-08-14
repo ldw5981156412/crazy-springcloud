@@ -1,0 +1,24 @@
+server:
+  port: 7702
+  servlet:
+    context-path: /uaa-provider
+
+management:
+  endpoints:
+    web:
+      base-path: "/actuator"  # 配置 Endpoint 的基础路径
+      exposure:
+        include: '*'  #在yaml 文件属于关键字，所以需要加引号
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    ip-address: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true #访问路径优先使用IP地址
+    status-page-url-path: /${management.endpoints.web.base-path}/info #定义实例信息的页面地址
+    health-check-url-path: /${management.endpoints.web.base-path}/health #定义健康检查的页面地
+  client:
+    register-with-eureka: true  #注册到eureka服务器
+    fetch-registry: true  #是否去注册中心获取其他服务
+    service-url:
+      defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置

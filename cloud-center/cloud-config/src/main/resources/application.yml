@@ -1,0 +1,20 @@
+server:
+  port: 7788  #配置中心端口
+spring:
+  application:
+    name: config-server   # 服务名称
+  profiles:
+    active: native   # 设置读取本地配置文件
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: classpath:config/  #申明本地配置文件的存放位置
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true   #开启客户端健康检查
+  instance:
+    lease-renewal-interval-in-seconds: 5  # 心跳时间，即服务续约间隔时间（默认为30秒）
+    lease-expiration-duration-in-seconds: 15 # 租约有效期，即服务续约到期时间（默认为90秒）

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: uaa-provider
+eureka:
+  client:
+    healthcheck:
+      enabled: true   #开启客户端健康检查
+  instance:
+    lease-renewal-interval-in-seconds: 5  # 续租(心跳)频率，Client 发送心跳给 Eureka 的时间间隔，默认 30 秒
+    lease-expiration-duration-in-seconds: 15  #  租约有效期，在该时间内若client未更新租约，将剔除client，默认 90 秒

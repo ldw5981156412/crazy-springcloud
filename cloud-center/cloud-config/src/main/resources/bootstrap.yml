@@ -1,0 +1,28 @@
+management:
+  # 暴露 EndPoint 以供访问，有jmx和web两种方式，exclude 的优先级高于 include
+  endpoints:
+    jmx:
+      exposure:
+        exclude: '*'
+        include: '*'
+    web:
+      base-path: "/actuator"  # 配置 Endpoint 的基础路径
+      exposure:
+        include: ["health","info","beans","mappings","logfile","metrics","shutdown","env"]
+      cors: # 配置跨域资源共享
+        allowed-origins: http://crazydemo.com,http://zuul.server,http://nginx.server
+        allowed-methods: GET,POST
+    enabled-by-default: true # 修改全局Endpoint默认设置
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    ip-address: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true #访问路径优先使用IP地址
+    status-page-url-path: /${management.endpoints.web.base-path}/info #定义实例信息的页面地址
+    health-check-url-path: /${management.endpoints.web.base-path}/health #定义健康检查的页面地
+  client:
+    register-with-eureka: true  #注册到eureka服务器
+    fetch-registry: true  #是否去注册中心获取其他服务
+    service-url:
+      defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置

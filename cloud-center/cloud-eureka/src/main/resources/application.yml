@@ -1,0 +1,18 @@
+server:
+  port: 7777
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
+  instance:
+    hostname: ${EUREKA_ZONE_HOST:localhost}
+    ip-address: ${spring.cloud.client.ip-address}
+  server:
+    enable-self-preservation: true #开启自我保护
+    eviction-interval-timer-in-ms: 6000 # 扫描失效服务的间隔时间（单位为毫秒，默认是60×1000毫秒，即60秒）
