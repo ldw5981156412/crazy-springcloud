@@ -4,14 +4,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * 启用Eureka Client客户端组件
  */
 @EnableEurekaClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "com.crazymaker.springcloud.user",
+        "com.crazymaker.springcloud.seckill.remote.fallback",
+        "com.crazymaker.springcloud.standard"
+})
+@EnableSwagger2
+@EnableFeignClients(basePackages =
+        {"com.crazymaker.springcloud.seckill.remote.client"})
 @Slf4j
 public class UAACloudApplication {
     public static void main(String[] args) {
