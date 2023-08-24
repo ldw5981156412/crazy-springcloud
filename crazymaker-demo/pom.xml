@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>demo-client</module>
+        <module>demo-provider</module>
     </modules>
 
     <dependencies>
