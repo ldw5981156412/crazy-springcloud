@@ -22,7 +22,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         this.decodedJWT = decodedJWT;
     }
 
-    public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, UserDetails userDetails, DecodedJWT decodedJWT) {
+    public JwtAuthenticationToken(UserDetails userDetails, DecodedJWT decodedJWT, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.userDetails = userDetails;
         this.decodedJWT = decodedJWT;

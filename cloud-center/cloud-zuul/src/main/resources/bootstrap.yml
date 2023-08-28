@@ -1,0 +1,23 @@
+server:
+  port: 8888
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    ip-address: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true #访问路径优先使用IP地址
+    status-page-url-path: /info #定义实例信息的页面地址
+    health-check-url-path: /health #定义健康检查的页面地
+  client:
+    register-with-eureka: true  #注册到eureka服务器
+    fetch-registry: true  #是否去注册中心获取其他服务
+    service-url:
+      defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
+
+
+#服务网关配置
+zuul:
+  ribbon-isolation-strategy: thread
+  host:
+    connect-timeout-millis: 600000
+    socket-timeout-millis: 600000

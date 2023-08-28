@@ -11,7 +11,7 @@ public class SessionConstants
      */
 
     public static final String AUTHORIZATION_HEAD = "token";
-//    public static final String ADMIN_AUTHORIZATION_HEAD = "Authorization";
+    public static final String ADMIN_AUTHORIZATION_HEAD = "Authorization";
 
     /**
      * token请求头名称
@@ -31,7 +31,7 @@ public class SessionConstants
     /**
      * 管理控制台的 sessionId 键值前缀
      */
-//    public static final String ADMIN_SESSION_STORE = "BACK-ADMIN-END";//redisSessionId 的身份标识
+    public static final String ADMIN_SESSION_STORE = "BACK-ADMIN-END";//redisSessionId 的身份标识
     /**
      * 存于redis中的sessionId前缀
      */

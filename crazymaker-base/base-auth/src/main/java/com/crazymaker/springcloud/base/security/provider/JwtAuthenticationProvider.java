@@ -1,13 +1,22 @@
 package com.crazymaker.springcloud.base.security.provider;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.crazymaker.springcloud.base.security.token.JwtAuthenticationToken;
+import com.crazymaker.springcloud.common.constants.SessionConstants;
 import com.crazymaker.springcloud.common.dto.UserDTO;
 import com.crazymaker.springcloud.common.util.JsonUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.session.Session;
 import org.springframework.session.data.redis.RedisOperationsSessionRepository;
@@ -56,7 +65,28 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         if(null == userDTO){
             throw new NonceExpiredException("认证有误,请重新登录");
         }
-        return null;
+        //判断是否在其他地方已经登录
+        if(null == newToken || !newToken.equals(userDTO.getToken())){
+            throw new NonceExpiredException("您已经在其他的地方登录!");
+        }
+        String userID = String.valueOf(userDTO.getUserId());
+        UserDetails userDetails = User.builder().username(userID).password(userDTO.getPassword())
+                .authorities(SessionConstants.USER_INFO).build();
+        try {
+            //用户密码的密文作为JWT的加密盐
+            String encryptSalt = userDTO.getPassword();
+            Algorithm algorithm = Algorithm.HMAC256(encryptSalt);
+            //创建验证器
+            JWTVerifier verifier = JWT.require(algorithm).withSubject(sid).build();
+            //进行JWT token进行验证
+            verifier.verify(newToken);
+        } catch (Exception e) {
+            throw new BadCredentialsException("认证有误：令牌校验失败，请重新登录", e);
+        }
+        //返回认证通过的令牌，包含用户信息，如user id等
+        JwtAuthenticationToken passedToken = new JwtAuthenticationToken(userDetails, jwt, userDetails.getAuthorities());
+        passedToken.setAuthenticated(true);
+        return passedToken;
     }
 
     @Override
