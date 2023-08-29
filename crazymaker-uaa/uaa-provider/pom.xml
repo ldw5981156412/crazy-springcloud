@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>uua-provider</artifactId>
+    <artifactId>uaa-provider</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <!--Spring Boot Web服务组件 -->
@@ -67,6 +67,11 @@
         <dependency>
             <groupId>com.crazymaker.springcloud</groupId>
             <artifactId>base-runtime</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.crazymaker.springcloud</groupId>
+            <artifactId>uaa-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

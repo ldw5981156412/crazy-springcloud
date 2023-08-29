@@ -15,6 +15,8 @@
         <module>base-common</module>
         <module>base-runtime</module>
         <module>base-auth</module>
+        <module>base-session</module>
+        <module>base-redis</module>
     </modules>
     <dependencyManagement>
         <dependencies>

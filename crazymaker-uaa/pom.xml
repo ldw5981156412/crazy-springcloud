@@ -12,7 +12,10 @@
     <artifactId>crazymaker-uaa</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>uua-provider</module>
+        <module>uaa-provider</module>
+        <module>uaa-client</module>
+        <module>uaa-api</module>
+        <module>uaa-react-provider</module>
     </modules>
     <dependencyManagement>
         <dependencies>
