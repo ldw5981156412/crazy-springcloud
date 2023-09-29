@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: eureka-server
+  cloud:
+    inetutils:
+      timeout-seconds: 10
+      preferred-networks: ${SCAFFOLD_PREFERRED_NETWORKS:192.168.}
 
 eureka:
   client:
@@ -13,6 +17,7 @@ eureka:
   instance:
     hostname: ${EUREKA_ZONE_HOST:localhost}
     ip-address: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true #访问路径可以显示IP地址
   server:
     enable-self-preservation: true #开启自我保护
     eviction-interval-timer-in-ms: 6000 # 扫描失效服务的间隔时间（单位为毫秒，默认是60×1000毫秒，即60秒）
