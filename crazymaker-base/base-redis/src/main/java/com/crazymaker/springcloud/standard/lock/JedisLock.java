@@ -75,6 +75,7 @@ public class JedisLock implements Lock {
             localLocked = this.innerLock.lock(expire);
             if (!localLocked) {
                 millisToWait = millisToWait - (System.currentTimeMillis() - startMillis);
+                startMillis = System.currentTimeMillis();
                 if (millisToWait > 0L) {
                     /**
                      * 还没有超时

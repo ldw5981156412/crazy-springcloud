@@ -17,6 +17,7 @@
         <module>base-auth</module>
         <module>base-session</module>
         <module>base-redis</module>
+        <module>base-zookeeper</module>
     </modules>
     <dependencyManagement>
         <dependencies>
