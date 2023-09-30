@@ -9,17 +9,18 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>crazymaker-base</artifactId>
+    <artifactId>crazymaker-seckill</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>base-common</module>
-        <module>base-runtime</module>
-        <module>base-auth</module>
-        <module>base-session</module>
-        <module>base-redis</module>
-        <module>base-zookeeper</module>
-        <module>redission-starter</module>
+        <module>seckill-api</module>
+        <module>seckill-common</module>
+        <module>seckill-client</module>
+        <module>seckill-web</module>
+        <module>stock-provider</module>
+        <module>seckill-provider</module>
     </modules>
+
+    <!-- 引入 spring-cloud模块 -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -29,17 +30,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 </project>

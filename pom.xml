@@ -15,6 +15,7 @@
         <module>crazymaker-uaa</module>
         <module>crazymaker-demo</module>
         <module>crazymaker-base</module>
+        <module>crazymaker-seckill</module>
     </modules>
 
     <properties>
@@ -45,6 +46,9 @@
         <swagger.version>2.9.2</swagger.version>
         <swagger.version.3>3.0.4</swagger.version.3>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
+        <druid-datasource-version>1.1.23</druid-datasource-version>
+        <jackson-databind.version>2.9.4</jackson-databind.version>
+        <hotkey-version>0.0.4-CRAZY-SNAPSHOT</hotkey-version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,6 +56,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-datasource-version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
