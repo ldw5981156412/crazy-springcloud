@@ -21,4 +21,7 @@ public enum GlobalConstant {
         return constantValue;
     }
 
+    public String getConstantDesc() {
+        return constantDesc;
+    }
 }

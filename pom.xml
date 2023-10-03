@@ -16,6 +16,8 @@
         <module>crazymaker-demo</module>
         <module>crazymaker-base</module>
         <module>crazymaker-seckill</module>
+        <module>cloud-center-alibaba</module>
+        <module>crazymaker-message</module>
     </modules>
 
     <properties>

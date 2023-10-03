@@ -26,4 +26,8 @@ public enum RedisConnectionType {
     public String getConnectionType() {
         return connectionType;
     }
+
+    public String getConnectionDesc() {
+        return connectionDesc;
+    }
 }

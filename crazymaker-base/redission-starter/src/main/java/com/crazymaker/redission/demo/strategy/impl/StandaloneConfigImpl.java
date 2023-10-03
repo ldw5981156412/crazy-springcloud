@@ -26,7 +26,7 @@ public class StandaloneConfigImpl implements RedissonConfigService {
             String redisAddr = GlobalConstant.REDIS_CONNECTION_PREFIX.getConstantValue() + address;
             config.useSingleServer().setAddress(redisAddr);
             config.useSingleServer().setDatabase(database);
-            if(StringUtils.isNotEmpty(password)){
+            if(StringUtils.isNotBlank(password)){
                 config.useSingleServer().setPassword(password);
             }
             log.info("初始化[单机部署]方式Config,redisAddress:" + address);
