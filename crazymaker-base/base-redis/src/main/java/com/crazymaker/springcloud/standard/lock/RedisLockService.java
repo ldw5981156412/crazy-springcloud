@@ -26,7 +26,7 @@ public class RedisLockService {
     }
 
     //获取分段锁
-    public Lock getSegmentLock(String lockKey, String requestId, int segAmount) {
+    public JedisMultiSegmentLock getSegmentLock(String lockKey, String requestId, int segAmount) {
         return new JedisMultiSegmentLock(lockKey, requestId, segAmount);
     }
 

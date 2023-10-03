@@ -18,6 +18,7 @@
         <module>seckill-web</module>
         <module>stock-provider</module>
         <module>seckill-provider</module>
+        <module>redission-demo-provider</module>
     </modules>
 
     <!-- 引入 spring-cloud模块 -->
