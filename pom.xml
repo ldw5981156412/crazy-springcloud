@@ -15,6 +15,9 @@
         <module>crazymaker-uaa</module>
         <module>crazymaker-demo</module>
         <module>crazymaker-base</module>
+        <module>crazymaker-seckill</module>
+        <module>cloud-center-alibaba</module>
+        <module>crazymaker-message</module>
     </modules>
 
     <properties>
@@ -31,7 +34,10 @@
         <mysql.connector.version>8.0.22</mysql.connector.version>
         <env.version>1.0-SNAPSHOT</env.version>
         <transmittable.version>2.11.0</transmittable.version>
-
+        <env.version>1.0-SNAPSHOT</env.version>
+        <zookeeper.version>3.4.8</zookeeper.version>
+        <curator.version>4.0.0</curator.version>
+        <jedis.version>2.9.0</jedis.version>
         <java.version>1.8</java.version>
         <lombok.version>1.18.28</lombok.version>
         <fastjson.version>1.2.83</fastjson.version>
@@ -42,6 +48,18 @@
         <swagger.version>2.9.2</swagger.version>
         <swagger.version.3>3.0.4</swagger.version.3>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
+        <druid-datasource-version>1.1.23</druid-datasource-version>
+        <jackson-databind.version>2.9.4</jackson-databind.version>
+        <hotkey-version>0.0.4-CRAZY-SNAPSHOT</hotkey-version>
+        <rocketmq-client.version>4.6.0</rocketmq-client.version>
+
+        <docker-maven-plugin.version>1.2.0</docker-maven-plugin.version>
+        <docker.baseImage>openjdk:8-jre-alpine</docker.baseImage>
+        <docker.volumes>/tmp</docker.volumes>
+        <docker.image.prefix>hub.zlt.com:8080/Crazy-SpringCloud</docker.image.prefix>
+        <docker.java.security.egd>-Djava.security.egd=file:/dev/./urandom</docker.java.security.egd>
+        <docker.java.opts>-Xms128m -Xmx128m</docker.java.opts>
+
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,6 +67,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-datasource-version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -117,6 +140,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
         </dependency>
     </dependencies>
     <build>

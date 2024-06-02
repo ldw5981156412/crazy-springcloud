@@ -17,6 +17,11 @@
         <module>base-auth</module>
         <module>base-session</module>
         <module>base-redis</module>
+        <module>base-zookeeper</module>
+        <module>redission-starter</module>
+        <module>l2cache-starter</module>
+        <module>base-kafka</module>
+        <module>base-email</module>
     </modules>
     <dependencyManagement>
         <dependencies>
