@@ -1,9 +1,11 @@
 package com.crazymaker.springcloud.base.filter;
 
 import com.crazymaker.springcloud.common.constants.SessionConstants;
+import com.crazymaker.springcloud.common.context.SessionHolder;
 import com.crazymaker.springcloud.standard.redis.RedisRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.session.Session;
 import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,9 +27,27 @@ public class SessionIdFilter extends OncePerRequestFilter {
         this.redisRepository = redisRepository;
     }
 
+    /**
+     * 将session userIdentifier（用户ID）转成session id
+     * @param request
+     * @param response
+     * @param filterChain
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        //从请求头中获取session userIdentifier（用户ID）
+        String identifier = request.getHeader(SessionConstants.USER_IDENTIFIER);
+        SessionHolder.setUserIdentifer(identifier);
+        //从请求头中获取session userIdentifier（用户ID）
+        String sid = redisRepository.getSessionId(identifier);
+        if(StringUtils.isNotEmpty(sid)){
+            //判断分布式会话是否存在
+            Session session = sessionRepository.findById(sid);
+            if (null != session){
+                //保存session id在线程中的局部变量，供后面的过滤器使用
+                SessionHolder.setSid(sid);
+            }
+        }
     }
 
     /**

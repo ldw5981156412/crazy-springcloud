@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="APP_Name" value="config-server" />
+    <property name="APP_Name" value="eureka-server" />
     <contextName>${APP_Name}</contextName>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径，请根据需求配置路径-->
-    <property name="LOG_HOME" value="${log_cloud_config_path:-D:/logs/config-server/logs}" />
+    <property name="LOG_HOME" value="${log_cloud_eureka_path:-C:/logs/eureka-server/logs}" />
 
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
