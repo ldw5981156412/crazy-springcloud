@@ -2,6 +2,12 @@ server:
   port: 7700
   servlet:
       context-path: /demo-provider
+    tomcat:
+    uri-encoding: UTF-8
+    max-threads: 200
+    accept-count: 1000
+    max-connections: 5000
+    min-spare-threads: 20
 
 management:
   endpoints:

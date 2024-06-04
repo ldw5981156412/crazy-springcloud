@@ -1,20 +1,21 @@
 package com.crazymaker.springcloud.demo.start;
 
-import com.crazymaker.springcloud.standard.context.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
-
-import java.util.List;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableFeignClients
 @EnableEurekaClient
-@SpringBootApplication
+@EnableSwagger2
+@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
 @Slf4j
 public class DemoCloudApplication {
 
@@ -23,8 +24,8 @@ public class DemoCloudApplication {
         /**
          * 打印所有的 spring ioc bean
          */
-        List<String> beans = SpringContextUtil.getBeanDefinitionNames();
-        log.info(beans.toString());
+//        List<String> beans = SpringContextUtil.getBeanDefinitionNames();
+//        log.info(beans.toString());
 
         Environment env = applicationContext.getEnvironment();
         String port = env.getProperty("server.port");
