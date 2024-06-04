@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="APP_Name" value="config-server" />
+    <property name="APP_Name" value="uaa-provider" />
     <contextName>${APP_Name}</contextName>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径，请根据需求配置路径-->
-    <property name="LOG_HOME" value="${log_cloud_config_path:-D:/logs/config-server/logs}" />
+    <property name="LOG_HOME" value="${log_uaa_provider_path:-C:/logs/uaa-provider/logs}" />
 
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
@@ -50,6 +50,12 @@
     <logger name="java.sql.PreparedStatement" level="WARN"/>
     <logger name="org.apache.shiro" level="WARN"/>
     <logger name="springfox.documentation" level="WARN"/>
+
+    <!--<springProfile nickname="dev">-->
+    <logger name="com.crazymaker.springcloud.user" level="debug"/>
+    <!--<logger nickname="com.crazymaker.springcloud" level="debug" />-->
+    <!--</springProfile>-->
+
 
     <!-- 日志输出级别  ，注意：如果不写<appender-ref ref="FILE" /> ，将导致springbootadmin找不到文件，无法查看日志 -->
     <root level="INFO">

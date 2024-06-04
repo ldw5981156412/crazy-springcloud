@@ -3,21 +3,17 @@ server:
 spring:
   application:
     name: eureka-server
-  cloud:
-    inetutils:
-      timeout-seconds: 10
-      preferred-networks: ${SCAFFOLD_PREFERRED_NETWORKS:192.168.}
 
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: false   #注册中心 Provider 实例，不向注册中心注册自己
+    fetch-registry: false         #注册中心 Provider 实例，不做检索服务
     service-url:
       defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
   instance:
+    prefer-ip-address: true     #访问路径可以显示IP地址，而不使用主机名来定义Provider实例的地址
     hostname: ${EUREKA_ZONE_HOST:localhost}
-    ip-address: ${spring.cloud.client.ip-address}
-    prefer-ip-address: true #访问路径可以显示IP地址
+    ip-address: ${spring.cloud.client.ip-address}   #设置当前实例的IP地址。
   server:
-    enable-self-preservation: true #开启自我保护
-    eviction-interval-timer-in-ms: 6000 # 扫描失效服务的间隔时间（单位为毫秒，默认是60×1000毫秒，即60秒）
+    enable-self-preservation: false  # 关闭自我保护，防止失效的服务也被一直访问 (默认是 true)
+    eviction-interval-timer-in-ms: 10000 # 扫描失效服务的间隔时间（单位为毫秒，默认是60×1000毫秒，即60秒）如果Eureka Server处于保护状态，此配置就无效
