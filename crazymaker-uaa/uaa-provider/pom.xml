@@ -70,6 +70,12 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <artifactId>base-session</artifactId>
+            <groupId>com.crazymaker.springcloud</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.crazymaker.springcloud</groupId>
             <artifactId>uaa-api</artifactId>
             <version>1.0-SNAPSHOT</version>

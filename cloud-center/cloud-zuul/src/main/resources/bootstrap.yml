@@ -14,6 +14,25 @@ eureka:
     service-url:
       defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
 
+spring:
+  cloud:
+    config:
+      label:  ${SCAFFOLD_LABEL:dev}   #对应的是配置文件规则中的{label}部分
+      name: crazymaker #对应的是配置文件规则中的{application}部分
+      profile: common,db,redis  #对应的是配置文件规则中的{profile}部分，可以是多个，用逗号隔开。
+      discovery:
+        enabled: true
+        service-id: config-server
+    #  zipkin:
+    #    base-url: http://${EUREKA_ZONE_HOST:localhost}:8765
+    #  sleuth:
+    #    sampler:
+    #      probability: 1.0
+
+    inetutils:
+      timeout-seconds: 10
+      preferred-networks: ${SCAFFOLD_PREFERRED_NETWORKS:192.168.}
+      prefer-ip-address: true  #访问路径可以显示IP地址
 
 #服务网关配置
 zuul:
@@ -21,3 +40,53 @@ zuul:
   host:
     connect-timeout-millis: 600000
     socket-timeout-millis: 600000
+  #路由规则
+  routes:
+    stock-provider:
+      path: /stock-provider/**
+      serviceId: stock-provider
+      strip-prefix: false
+    seckill-provider:
+      path: /seckill-provider/**
+      serviceId: seckill-provider
+      strip-prefix: false
+    message-provider:
+      path: /message-provider/**
+      serviceId: message-provider
+      strip-prefix: false
+    uaa-provider:
+      path: /uaa-provider/**
+      serviceId: uaa-provider
+      strip-prefix: false
+    backend-provider:
+      path: /backend-provider/**
+      serviceId: backend-provider
+      strip-prefix: false
+    generate-provider:
+      path: /generate-provider/**
+      serviceId: generate-provider
+      strip-prefix: false
+      sensitiveHeaders: Cookie,Set-Cookie,token,backend,Authorization
+    demo-provider:
+      path: /demo-provider/**
+      serviceId: demo-provider
+      strip-prefix: false
+    crazymakercircle-blog:
+      path: /blog/**
+      url: https://www.cnblogs.com
+      sensitiveHeaders: Cookie,Set-Cookie,token,backend,Authorization
+ribbon:
+  eager-load:
+    enabled: true
+  #说明：同一台实例的最大自动重试次数，默认为1次，不包括首次
+  MaxAutoRetries: 1
+  #说明：要重试的下一个实例的最大数量，默认为1，不包括第一次被调用的实例
+  MaxAutoRetriesNextServer: 1
+  #说明：是否所有的操作都重试，默认为true
+  OkToRetryOnAllOperations: true
+  #说明：从注册中心刷新服务器列表信息的时间间隔，默认为2000毫秒，即2秒
+  ServerListRefreshInterval: 2000
+  #说明：使用Apache HttpClient连接超时时间，单位为毫秒
+  ConnectTimeout: 300000
+  #说明：使用Apache HttpClient读取的超时时间，单位为毫秒
+  ReadTimeout: 300000

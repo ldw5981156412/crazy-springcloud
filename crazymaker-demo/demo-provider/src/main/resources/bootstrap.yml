@@ -39,6 +39,22 @@ eureka:
     serviceUrl:
       defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/}
 
+spring:
+  cloud:
+    config:
+      label:  ${SCAFFOLD_LABEL:dev} #对应的是配置文件规则中的{label}部分
+      name: crazymaker #对应的是配置文件规则中的{application}部分
+      profile: common,db,redis #对应的是配置文件规则中的{profile}部分，可以是多个，用逗号隔开。
+      discovery:
+        enabled: true #开启配置服务的自动发现机制
+        service-id: config-server
+    inetutils:
+      timeout-seconds: 10
+      preferred-networks: ${SCAFFOLD_PREFERRED_NETWORKS:192.168.}
+      prefer-ip-address: true #访问路径可以显示IP地址
+  main:
+    allow-bean-definition-overriding: true
+
 feign:
   httpclient:
       enabled: true
@@ -49,3 +65,18 @@ feign:
       default:
          connectTimeout: 50000  #连接超时时间
          readTimeout: 50000  #读取超时时间
+ribbon:
+  eager-load:
+    enabled: true # 开启Ribbon的饥饿加载模式，启动时创建 RibbonClient
+  MaxAutoRetries: 1 # 同一台实例的最大重试次数，但是不包括首次调用，默认为1次
+  MaxAutoRetriesNextServer: 2  # 重试负载均衡其他实例的最大重试次数，不包括首次调用，默认为0次
+  OkToRetryOnAllOperations: true  # 是否对所有操作都重试，默认false
+  ServerListRefreshInterval: 2000 # 从注册中心刷新服务器列表信息的时间间隔，默认为2000毫秒，即2秒
+  retryableStatusCodes: 400,401,403,404,500,502,504
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+  ConnectTimeout: 3000  #连接建立的超时时长，默认1秒
+  ReadTimeout: 3000 #处理请求的超时时间，默认为1秒
+  MaxTotalConnections: 1000  # 最大连接数
+  MaxConnectionsPerHost: 1000  # 每个host最大连接数
+  restclient:
+    enabled: true

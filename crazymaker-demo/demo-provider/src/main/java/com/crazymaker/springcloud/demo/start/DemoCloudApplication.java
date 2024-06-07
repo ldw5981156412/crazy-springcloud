@@ -12,10 +12,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableFeignClients
+@EnableFeignClients(
+        basePackages = {
+            "com.crazymaker.springcloud.seckill.remote.client"
+        }
+)
 @EnableEurekaClient
 @EnableSwagger2
-@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
 @Slf4j
 public class DemoCloudApplication {
 

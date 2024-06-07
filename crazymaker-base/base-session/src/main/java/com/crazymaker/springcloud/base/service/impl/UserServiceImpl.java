@@ -37,6 +37,16 @@ public class UserServiceImpl {
     @Resource
     private RedisOperationsSessionRepository sessionRepository;
 
+    public UserDTO getUser(Long id){
+        UserPO userPO = userDao.findByUserId(id);
+        if (userPO == null) {
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(userPO, userDTO);
+            return userDTO;
+        }
+        return null;
+    }
+
     /**
      * 登录处理
      * @param dto
