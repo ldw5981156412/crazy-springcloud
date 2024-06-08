@@ -55,7 +55,7 @@ public class SnowflakeIdWorker {
         int index = pathRegistered.lastIndexOf(pathPrefix);
         if (index >= 0) {
             index += pathPrefix.length();
-            sid = index <= pathPrefix.length() ? pathRegistered.substring(index) : null;
+            sid = index <= pathRegistered.length() ? pathRegistered.substring(index) : null;
         }
         if (null == sid) {
             throw new RuntimeException("节点ID生成失败");

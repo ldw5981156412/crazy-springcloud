@@ -3,6 +3,7 @@ package com.crazymaker.springcloud.standard.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -24,12 +25,12 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.crazymaker"))
-                .paths(PathSelectors.any())
+//                .apis(RequestHandlerSelectors.basePackage("com.crazymaker"))
+//                .paths(PathSelectors.any())
                 //控制暴露出去的路径下的实例
                 //如果某个接口不想暴露,可以使用以下注解
                 //@ApiIgnore 这样,该接口就不会暴露在 swagger2 的页面下
-//                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .build();
 //                .directModelSubstitute(Long.class, String.class)
 //                .globalOperationParameters(list);

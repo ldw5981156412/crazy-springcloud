@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value = "demo-provider", path = "/api/demo/",
+@FeignClient(value = "demo-provider", path = "/demo-provider/api/demo/",
         fallback = DemoDefaultFallback.class)
 public interface DemoClient {
 
@@ -28,6 +28,6 @@ public interface DemoClient {
      * REST 接口 功能： 回显输入的信息
      * @return echo 回显消息 JSON 响应实例
      */
-    @RequestMapping(name = "/echo/{word}/v1",method = RequestMethod.GET)
+    @RequestMapping(value = "/echo/{word}/v1",method = RequestMethod.GET)
     RestOut<JSONObject> echo(@PathVariable(value = "word") String word);
 }

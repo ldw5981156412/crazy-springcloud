@@ -24,21 +24,25 @@ public class DemoRPCController {
     @GetMapping("/hello/v1")
     @ApiOperation(value = "hello远程调用")
     public RestOut<JSONObject> remoteHello(){
-        RestOut<JSONObject> hello = demoClient.hello();
+        log.info("方法 remoteHello 被调用了");
+        /**
+         * 调用   demo-provider 的  REST 接口  api/demo/hello/v1
+         */
+        RestOut<JSONObject> result = demoClient.hello();
         JSONObject data = new JSONObject();
-        data.put("demo-data",hello);
+        data.put("demo-data", result);
         return RestOut.success(data).setRespMsg("操作成功");
     }
 
     @GetMapping("/echo/{word}/v1")
     @ApiOperation(value = "hello远程调用")
-    public RestOut<JSONObject> remoteecho(@PathVariable("word") String word){
+    public RestOut<JSONObject> remoteEcho(@PathVariable("word") String word){
         /**
-         * 调用demo-provider的REST接口api/demo/echo/{0}/v1
+         * 调用  demo-provider 的  REST 接口   api/demo/echo/{0}/v1
          */
-        RestOut<JSONObject> hello = demoClient.echo(word);
+        RestOut<JSONObject> result = demoClient.echo(word);
         JSONObject data = new JSONObject();
-        data.put("demo-data",hello);
+        data.put("demo-data", result);
         return RestOut.success(data).setRespMsg("操作成功");
     }
 }

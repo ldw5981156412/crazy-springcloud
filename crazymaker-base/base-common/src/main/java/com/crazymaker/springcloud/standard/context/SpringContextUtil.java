@@ -11,6 +11,9 @@ import java.util.List;
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
 
+    /**
+     * 上下文对象实例
+     */
     private static ApplicationContext applicationContext;
 
     @Override
@@ -18,6 +21,11 @@ public class SpringContextUtil implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * 获取applicationContext
+     *
+     * @return
+     */
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
     }

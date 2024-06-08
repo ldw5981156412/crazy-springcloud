@@ -1,5 +1,6 @@
 package com.crazymaker.springcloud.demo.start;
 
+import com.crazymaker.springcloud.standard.context.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -12,14 +13,23 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.List;
+
 @EnableFeignClients(
         basePackages = {
-            "com.crazymaker.springcloud.seckill.remote.client"
+                "com.crazymaker.springcloud.seckill.remote.client"
         }
 )
 @EnableEurekaClient
 @EnableSwagger2
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = {
+        "com.crazymaker.springcloud.demo",
+//        "com.crazymaker.springcloud.base",
+        "com.crazymaker.springcloud.user",
+        "com.crazymaker.springcloud.seckill.remote.fallback",
+        "com.crazymaker.springcloud.standard"
+},
+        exclude = {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
 @Slf4j
 public class DemoCloudApplication {
 

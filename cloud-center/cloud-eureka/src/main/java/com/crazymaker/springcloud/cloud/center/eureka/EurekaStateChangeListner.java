@@ -14,25 +14,28 @@ import org.springframework.stereotype.Component;
 public class EurekaStateChangeListner {
 
     /**
-     * 服务下线事件
+     * 服务上线 事件
+     */
+    @EventListener
+    public void listen(EurekaInstanceRegisteredEvent event){
+        InstanceInfo inst = event.getInstanceInfo();
+		log.info("statusPageUrl:{}",info.getStatusPageUrl());
+        log.info("healthCheckUrl:{}",info.getHealthCheckUrl());
+        log.info("{}:{} \t {} 服务上线",
+                inst.getIPAddr(),inst.getPort(),inst.getAppName());
+    }
+
+    /**
+     *  服务下线事件  
      */
     @EventListener
     public void listen(EurekaInstanceCanceledEvent event){
         log.info("{} \t {} 服务下线",event.getServerId(),event.getAppName());
     }
 
+
     /**
-     * 服务上线事件
-     */
-    @EventListener
-    public void listen(EurekaInstanceRegisteredEvent event){
-        InstanceInfo info = event.getInstanceInfo();
-        log.info("statusPageUrl:{}",info.getStatusPageUrl());
-        log.info("healthCheckUrl:{}",info.getHealthCheckUrl());
-        log.info("{}:{} \t {} 服务上线",info.getIPAddr(),info.getPort(),info.getAppName());
-    }
-    /**
-     * 服务续约(服务心跳)事件
+     * 服务续约(服务心跳) 事件
      */
     @EventListener
     public void listen(EurekaInstanceRenewedEvent event){
@@ -41,6 +44,6 @@ public class EurekaStateChangeListner {
 
     @EventListener
     public void listen(EurekaServerStartedEvent event){
-        log.info("Eureka Server启动");
+        log.info("Eureka Server 启动");
     }
 }

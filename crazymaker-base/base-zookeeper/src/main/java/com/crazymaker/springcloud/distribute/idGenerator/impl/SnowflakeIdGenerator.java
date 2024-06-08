@@ -8,18 +8,18 @@ public class SnowflakeIdGenerator implements IdGenerator {
     private String type = "undefined";
     private boolean inited;
 
+
+    public SnowflakeIdGenerator(String type) {
+        this.type = type;
+        worker = new SnowflakeIdWorker(type);
+
+    }
+
     /**
      * 该项目的worker 节点 id
      */
     private long workerId;
 
-    public SnowflakeIdGenerator() {
-    }
-
-    public SnowflakeIdGenerator(String type) {
-        this.type = type;
-        worker = new SnowflakeIdWorker(type);
-    }
 
     /**
      * 初始化单例
@@ -36,6 +36,11 @@ public class SnowflakeIdGenerator implements IdGenerator {
         }
         inited = true;
     }
+
+    private SnowflakeIdGenerator() {
+
+    }
+
 
     /**
      * 开始使用该算法的时间为: 2017-01-01 00:00:00

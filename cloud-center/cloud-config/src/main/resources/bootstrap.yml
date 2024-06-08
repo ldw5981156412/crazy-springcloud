@@ -1,6 +1,6 @@
 management:
-  # 暴露 EndPoint 以供访问，有jmx和web两种方式，exclude 的优先级高于 include
   endpoints:
+    # 暴露 EndPoint 以供访问，有jmx和web两种方式，exclude 的优先级高于 include
     jmx:
       exposure:
         exclude: '*'
@@ -14,15 +14,47 @@ management:
         allowed-methods: GET,POST
     enabled-by-default: true # 修改全局Endpoint默认设置
 
+spring:
+  cloud:
+    inetutils:
+      timeout-seconds: 10
+      preferred-networks: ${SCAFFOLD_PREFERRED_NETWORKS:192.168.}
+      prefer-ip-address: true  #访问路径可以显示IP地址
+
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
     ip-address: ${spring.cloud.client.ip-address}
-    prefer-ip-address: true #访问路径优先使用IP地址
+    prefer-ip-address: true  #访问路径可以显示IP地址
     status-page-url-path: /${management.endpoints.web.base-path}/info #定义实例信息的页面地址
     health-check-url-path: /${management.endpoints.web.base-path}/health #定义健康检查的页面地
   client:
     register-with-eureka: true  #注册到eureka服务器
-    fetch-registry: true  #是否去注册中心获取其他服务
+    fetch-registry: true  #要不要去注册中心获取其他服务
     service-url:
       defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
+ribbon:
+  eager-load:
+    enabled: true # 开启Ribbon的饥饿加载模式，启动时创建 RibbonClient
+  MaxAutoRetries: 1 # 同一台实例的最大重试次数，但是不包括首次调用，默认为1次
+  MaxAutoRetriesNextServer: 2  # 重试负载均衡其他实例的最大重试次数，不包括首次调用，默认为0次
+  OkToRetryOnAllOperations: true  # 是否对所有操作都重试，默认false
+  ServerListRefreshInterval: 2000 # 从注册中心刷新服务器列表信息的时间间隔，默认为2000毫秒，即2秒
+  retryableStatusCodes: 400,401,403,404,500,502,504
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+  ConnectTimeout: 3000  #连接建立的超时时长，默认1秒
+  ReadTimeout: 3000 #处理请求的超时时间，默认为1秒
+  MaxTotalConnections: 1000  # 最大连接数
+  MaxConnectionsPerHost: 1000  # 每个host最大连接数
+  restclient:
+    enabled: true
+feign:
+  httpclient:
+      enabled: true
+      max-connections: 1000 # 默认值 200
+      max-connections-per-route: 250 # 默认值   50
+  client:
+    config:
+      default:
+         connectTimeout: 50000  #连接超时时间
+         readTimeout: 50000  #读取超时时间

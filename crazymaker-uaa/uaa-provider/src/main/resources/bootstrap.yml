@@ -8,6 +8,7 @@ server:
     accept-count: 1000
     max-connections: 5000
     min-spare-threads: 20
+
 #### 暴露端点
 management:
   endpoints:
@@ -23,6 +24,8 @@ management:
     logfile:
       external-file: ${log_uaa_provider_path:C:/logs/uaa-provider/logs}/output.log
       enabled: true
+
+
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
@@ -35,3 +38,29 @@ eureka:
     fetch-registry: true  #是否去注册中心获取其他服务
     service-url:
       defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
+
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      label: dev  #对应的是配置文件规则中的{label}部分
+      name: crazymaker #对应的是配置文件规则中的{application}部分
+      profile: common,redis,db #对应的是配置文件规则中的{profile}部分，可以是多个，用逗号隔开。
+
+ribbon:
+  eager-load:
+    enabled: true # 开启Ribbon的饥饿加载模式，启动时创建 RibbonClient
+  MaxAutoRetries: 1 # 同一台实例的最大重试次数，但是不包括首次调用，默认为1次
+  MaxAutoRetriesNextServer: 2  # 重试负载均衡其他实例的最大重试次数，不包括首次调用，默认为0次
+  OkToRetryOnAllOperations: true  # 是否对所有操作都重试，默认false
+  ServerListRefreshInterval: 2000 # 从注册中心刷新服务器列表信息的时间间隔，默认为2000毫秒，即2秒
+  retryableStatusCodes: 400,401,403,404,500,502,504
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+  ConnectTimeout: 3000  #连接建立的超时时长，默认1秒
+  ReadTimeout: 3000 #处理请求的超时时间，默认为1秒
+  MaxTotalConnections: 1000  # 最大连接数
+  MaxConnectionsPerHost: 1000  # 每个host最大连接数
+  restclient:
+    enabled: true

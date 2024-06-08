@@ -1,6 +1,10 @@
 spring:
   application:
     name: uaa-provider
+  jpa:  #配置自动建表：update:没有表新建，有表更新操作,控制台显示建表语句
+    hibernate:
+      ddl-auto: update
+
 eureka:
   client:
     healthcheck:

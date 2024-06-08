@@ -1,5 +1,6 @@
 package com.crazymaker.springcloud.common.result;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -14,11 +15,30 @@ public class RestOut<T> {
      * 失败
      */
     public static final int STATUS_ERROR = -1;
+    /**
+     * 状态
+     */
+    @JsonProperty("respCode" )
     private int respCode;
+
+    /**
+     * 消息
+     */
+    @JsonProperty("respMsg" )
     private String respMsg;
+
+
+    /**
+     * 实际的数据
+     */
+    @JsonProperty("datas" )
     private T datas;
 
-    public RestOut(int respCode, String respMsg, T datas) {
+
+    public RestOut(@JsonProperty("respCode" ) int respCode,
+                      @JsonProperty("respMsg" ) String respMsg,
+                      @JsonProperty("datas" ) T datas)
+    {
         this.respCode = respCode;
         this.respMsg = respMsg;
         this.datas = datas;
@@ -86,9 +106,15 @@ public class RestOut<T> {
     @Override
     public String toString() {
         return "RestOut{" +
-                "respCode=" + respCode +
-                ", respMsg='" + respMsg + '\'' +
-                ", datas=" + datas +
+                "datas=" + datas +
+                ", respCode=" + respCode +
+                ", respMsg='" + respMsg +
                 '}';
+    }
+
+
+    public boolean isSuccess()
+    {
+        return respCode==STATUS_SUCCESS;
     }
 }

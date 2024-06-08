@@ -1,3 +1,5 @@
+ogging:
+  config: classpath:logback.xml
 spring:
   redis:
     blockWhenExhausted: true  # 链接耗尽时是否阻塞

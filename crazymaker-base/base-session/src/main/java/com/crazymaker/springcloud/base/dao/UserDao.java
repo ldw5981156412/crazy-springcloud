@@ -11,5 +11,13 @@ public interface UserDao extends JpaRepository<UserPO, Long>, JpaSpecificationEx
 
     UserPO findByUserId(Long id);
 
+
+    /**
+     * 根据loginName 做查询
+     *
+     * @param loginName 登录名称
+     * @return 用户列表
+     */
     List<UserPO> findAllByUsername(String loginName);
+
 }
