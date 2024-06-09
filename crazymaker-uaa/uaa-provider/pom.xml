@@ -51,12 +51,12 @@
             <groupId>com.crazymaker.springcloud</groupId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
+        <!--打开后，swagger2 访问需要登录，需要打开-->
+        <!--<dependency>
             <artifactId>base-auth</artifactId>
             <groupId>com.crazymaker.springcloud</groupId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
 
 
         <!-- swagger2 依赖 -->

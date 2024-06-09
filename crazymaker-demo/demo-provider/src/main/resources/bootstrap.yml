@@ -65,6 +65,8 @@ feign:
       default:
          connectTimeout: 50000  #连接超时时间
          readTimeout: 50000  #读取超时时间
+  hystrix:
+    enabled: true # 开启 Hystrix
 ribbon:
   eager-load:
     enabled: true # 开启Ribbon的饥饿加载模式，启动时创建 RibbonClient
@@ -80,3 +82,16 @@ ribbon:
   MaxConnectionsPerHost: 1000  # 每个host最大连接数
   restclient:
     enabled: true
+
+hystrix:
+  commands:
+    UserClient#detail(Long): # 独立接口配置，格式为： 远程接口名#方法名（参数类型列表）
+      circuitBreaker: # 熔断器配置
+        enabled: true #是否使用熔断器，默认为true
+        requestVolumeThreshold: 20  #至少有20个请求，熔断器才达到熔断触发的次数阈值
+        sleepWindowInMilliseconds: 5000 #打开后允许一次尝试的睡眠时间，默认配置为5秒
+        errorThresholdPercentage: 50  #窗口时间内熔断器开启的错误比例，默认配置为50
+      metrics:
+        timeInMilliseconds: 60000 #滑动窗口时间
+        numBuckets: 600   #滑动窗口的时间桶数
+        bucketSize: 200 #时间桶内的统计次数

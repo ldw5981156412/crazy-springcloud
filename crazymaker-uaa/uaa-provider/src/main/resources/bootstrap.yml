@@ -1,13 +1,13 @@
 server:
   port: 7702
-  servlet:
-    context-path: /uaa-provider
   tomcat:
-    uri-encoding: UTF-8
-    max-threads: 800
-    accept-count: 1000
-    max-connections: 5000
-    min-spare-threads: 20
+      uri-encoding: UTF-8
+      max-threads: 800
+      accept-count: 1000
+      max-connections: 5000
+      min-spare-threads: 20
+  servlet:
+      context-path: /uaa-provider
 
 #### 暴露端点
 management:
@@ -17,37 +17,44 @@ management:
       exposure:
         include: '*'  #在yaml 文件属于关键字，所以需要加引号
   endpoint:
-    health:
-      show-details: always
-    # spring boot admin  client不配置日志文件路径（同时配置logback-spring.xml对应的日志输出配置，否则无法输出日志），
-    # 控制台上的Logging模块下的Logfile会报错：Fetching logfile failed.Request failed with status code 404
     logfile:
+      # spring boot admin  client不配置日志文件路径（同时配置logback-spring.xml对应的日志输出配置，否则无法输出日志），
+      # 控制台上的Logging模块下的Logfile会报错：Fetching logfile failed.Request failed with status code 404
       external-file: ${log_uaa_provider_path:C:/logs/uaa-provider/logs}/output.log
       enabled: true
-
+    health:
+      show-details: always
 
 eureka:
+  client:
+    register-with-eureka: true #注册到eureka服务器
+    fetch-registry: true  #要不要去注册中心获取其他服务
+    serviceUrl:
+      defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/}
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
     ip-address: ${spring.cloud.client.ip-address}
-    prefer-ip-address: true #访问路径优先使用IP地址
+    prefer-ip-address: true  #访问路径可以显示IP地址
     status-page-url-path: /${management.endpoints.web.base-path}/info #定义实例信息的页面地址
     health-check-url-path: /${management.endpoints.web.base-path}/health #定义健康检查的页面地
-  client:
-    register-with-eureka: true  #注册到eureka服务器
-    fetch-registry: true  #是否去注册中心获取其他服务
-    service-url:
-      defaultZone: ${SCAFFOLD_EUREKA_ZONE_HOSTS:http://localhost:7777/eureka/} #服务注册中心的配置内容，指定服务注册中心的位置
+
+
+
 
 spring:
   cloud:
     config:
+      label: dev  #对应的是配置文件规则中的{label}部分
+      name: crazymaker #对应的是配置文件规则中的{application}部分
+      profile: common,db,redis  #对应的是配置文件规则中的{profile}部分，可以是多个，用逗号隔开。
       discovery:
         enabled: true
         service-id: config-server
-      label: dev  #对应的是配置文件规则中的{label}部分
-      name: crazymaker #对应的是配置文件规则中的{application}部分
-      profile: common,redis,db #对应的是配置文件规则中的{profile}部分，可以是多个，用逗号隔开。
+
+    inetutils:
+      timeout-seconds: 10
+      preferred-networks: ${SCAFFOLD_PREFERRED_NETWORKS:192.168.}
+      prefer-ip-address: true  #访问路径可以显示IP地址
 
 ribbon:
   eager-load:
