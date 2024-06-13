@@ -1,20 +1,18 @@
 package com.crazymaker.springcloud.demo.start;
 
-import com.crazymaker.springcloud.standard.context.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.List;
 
 @EnableFeignClients(
         basePackages = {
@@ -31,7 +29,9 @@ import java.util.List;
         "com.crazymaker.springcloud.seckill.remote.fallback",
         "com.crazymaker.springcloud.standard"
 },
-        exclude = {DataSourceAutoConfiguration.class, RedisAutoConfiguration.class})
+        exclude = {DataSourceAutoConfiguration.class,
+                RedisAutoConfiguration.class,
+                SecurityAutoConfiguration.class})
 @Slf4j
 public class DemoCloudApplication {
 

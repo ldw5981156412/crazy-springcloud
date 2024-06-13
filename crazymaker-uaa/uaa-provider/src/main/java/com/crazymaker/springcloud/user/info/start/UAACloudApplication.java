@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         "com.crazymaker.springcloud.seckill.remote.fallback",
         "com.crazymaker.springcloud.standard"
 }, exclude = {
-        SecurityAutoConfiguration.class
+        SecurityAutoConfiguration.class //禁用Spring Security
 })
 //引入base-session包需要
 @EnableSwagger2

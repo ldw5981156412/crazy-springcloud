@@ -7,7 +7,8 @@ eureka:
     healthcheck:
       enabled: true   #开启客户端健康检查
 zuul:
-  sensitive-headers: Cookie,Set-Cookie,token,backend,Authorization
+  sensitive-headers:
+#  sensitive-headers: Cookie,Set-Cookie,token,backend,Authorization
 server:
   servlet:
     context-path: /
