@@ -1,92 +1,108 @@
---返回值说明
---1 排队成功
---2 秒杀库存没有找到
---3 人数超过限制
---4 库存不足
---5 排队过了
---6 秒杀过了
--- -2 Lua 方法不存在
+--- 此脚本的环境： redis 内部，不是运行在 nginx 内部
 
---eg
--- /usr/local/redis/bin/redis-cli -a  123456 --eval   /vagrant/LuaDemoProject/src/luaScript/module/seckill/seckill.lua setToken  , 4b70903f6e1aa87788d3ea962f8b2f0e  38  demotoken
+---方法：申请令牌
+---eg
+----- /usr/local/redis/bin/redis-cli -a 123456 evalsha "75e0f0c8ab378aa178c3d7fe2aeabc4fc0e289fa" 1 "rate_limiter:seckill:1" acquire 1
+---
+--- -1 failed
+--- 1 success
+--- @param key 限流健
+--- @param apply 申请令牌数量
+local function acquire(key, apply)
+    local times = redis.call('TIME');
+    -- times[1] 秒数  -- times[2] 毫秒
+    local curr_mill_second = times[1] * 1000000 + times[2];
+    curr_mill_second = curr_mill_second / 1000;
 
-local function setToken(exposedKey, userId, token)
+    local cacheInfo = redis.pcall('HGET', key, 'last_mill_second', "curr_permits", "max_permits", "rate");
+    --- 局部变量：上次申请的时间
+    local last_mill_second = cacheInfo[1];
+    --- 局部变量：之前令牌桶中令牌数量
+    local curr_permits = tonumber(cacheInfo[2]);
+    --- 局部变量：桶的容量
+    local max_permits = tonumber(cacheInfo[3]);
+    --- 局部变量：令牌的发放速率
+    local rate = tonumber(cacheInfo[4]);
+    --- 局部变量：本次的令牌数
+    local local_curr_permits = 0;
 
-    --检查token 是否存在
-    local oldToken = redis.call("hget", "seckill:queue:" .. exposedKey, userId);
-    if oldToken then
-        return 5; --5 排队过了
-    end
-
-
-    --获取商品缓存次数
-    local stock = redis.call("get", "seckill:stock:" .. exposedKey);
-    --local stock = redis.call("get", "seckill:stock:4b70903f6e1aa87788d3ea962f8b2f0e" );
-    -- redis.debug("stock="..tostring(stock))
-    if stock then
-
-        local stockCount = tonumber(stock);
-        --redis.log(redis.LOG_NOTICE, "stock=" .. stock)
-        if stockCount <= 0 then
-            return 4;  --4 库存不足
-        end
-
-        -- stockCount = stockCount - 1;
-        -- redis.call("set", "seckill:stock:" .. exposedKey,stockCount);
-
-        redis.call("decr", "seckill:stock:" .. exposedKey);
-        redis.call("hset", "seckill:queue:" .. exposedKey, userId, token);
-        return 1; --1 排队成功
+    if (type(last_mill_second) ~= "boolean" and last_mill_second ~= nil) then
+        -- 计算时间段内的令牌数
+        local reverse_permits = math.floor(((curr_mill_second - last_mill_second) / 1000) * rate);
+        -- 令牌总数
+        local expect_curr_permits = reverse_permits + curr_permits;
+        -- 可以申请的令牌总数
+        local_curr_permits = math.min(expect_curr_permits, max_permits);
     else
-        --redis.debug("秒杀库存没有找到")
-        return 2;  --2 秒杀库存没有找到
+        -- 第一次获取令牌
+        redis.pcall('HSET', key, 'last_mill_second', curr_mill_second);
+        local_curr_permits = max_permits;
     end
-end
 
-
---eg
--- /usr/local/redis/bin/redis-cli -a  123456 --eval   /vagrant/LuaDemoProject/src/luaScript/module/seckill/seckill.lua setToken  , 4b70903f6e1aa87788d3ea962f8b2f0e 38  demotoken
-
---返回值说明
---5 排队过了
--- -1 没有排队
-local function checkToken(exposedKey, userId, token)
-    --检查token 是否存在
-    local oldToken = redis.call("hget", "seckill:queue:" .. exposedKey, userId);
-    if oldToken and (token == oldToken) then
-        --return 1 ;
-        return 5; --5 排队过了
+    local result = -1;
+    --有足够的令牌可以申请
+    if (local_curr_permits >= apply) then
+        --保存剩余的令牌
+        redis.pcall('HSET', key, 'curr_permits', local_curr_permits - apply);
+        -- 为下次的令牌获取，保存时间
+        redis.pcall('HSET', key, 'last_mill_second', curr_mill_second);
+        -- 返回令牌获取成功
+        result = 1;
+    else
+        -- 保存令牌总数
+        redis.pcall("HSET", key, "curr_permits", local_curr_permits);
+        -- 返回令牌获取失败
+        result = -1;
     end
-    return -1; -- -1 没有排队
+    return result;
 end
-
 --eg
--- /usr/local/redis/bin/redis-cli  --eval   /work/develop/LuaDemoProject/src/luaScript/module/seckill/seckill.lua checkToken  , 1  1  fca9b425-ac48-4c44-9e99-92d18898873c
+-- /usr/local/redis/bin/redis-cli  -a 123456  --eval   /vagrant/LuaDemoProject/src/luaScript/redis/rate_limiter.lua key , acquire 1  1
 
+-- 获取 sha编码的命令
+-- /usr/local/redis/bin/redis-cli  -a 123456  script load "$(cat  /vagrant/LuaDemoProject/src/luaScript/redis/rate_limiter.lua)"
+-- /usr/local/redis/bin/redis-cli  -a 123456  script exists  "75e0f0c8ab378aa178c3d7fe2aeabc4fc0e289fa"
 
+-- /usr/local/redis/bin/redis-cli -a 123456  evalsha   "75e0f0c8ab378aa178c3d7fe2aeabc4fc0e289fa" 1 "rate_limiter:seckill:2"  init 2  1
 
-local function deleteToken(exposedKey, userId)
-    redis.call("hdel", "seckill:queue:" .. exposedKey, userId);
+--local rateLimiterSha = "e4e49e4c7b23f0bf7a2bfee73e8a01629e33324b";
+--- 方法：初始化限流器
+--- 1 success
+--- @param key 限流健
+--- @param max_permits 桶的容量
+--- @param rate 令牌的发放速率
+local function init(key, max_permits, rate)
+    local rate_limit_info = redis.pcall('HMGET', key, 'last_mill_second', 'curr_permits', 'max_permits', 'rate');
+    local org_max_permits = tonumber(rate_limit_info[3])
+    local org_rate = rate_limit_info[4]
+    if (org_max_permits == nil) or (rate ~= org_rate or max_permits ~= org_max_permits) then
+        -- 初始化限流器
+        redis.pcall('HMSET', key, 'curr_permits', max_permits, 'max_permits', max_permits, 'rate', rate);
+    end
     return 1;
 end
 --eg
---  /usr/local/redis/bin/redis-cli  --eval   /work/develop/LuaDemoProject/src/luaScript/module/seckill/seckill.lua deleteToken  , 1  1
+-- /usr/local/redis/bin/redis-cli -a 123456 --eval   /vagrant/LuaDemoProject/src/luaScript/redis/rate_limiter.lua key , init 1  1
+-- /usr/local/redis/bin/redis-cli -a 123456 --eval   /vagrant/LuaDemoProject/src/luaScript/redis/rate_limiter.lua  "rate_limiter:seckill:1"  , init 1  1
 
+--- 方法：删除限流的健
+local function delete(key)
+    redis.pcall('DEL', key)
+    return 1;
+end
+--eg
+-- /usr/local/redis/bin/redis-cli  --eval   /vagrant/LuaDemoProject/src/luaScript/redis/rate_limiter.lua key , delete
 
+local key = KEYS[1]
+local method = ARGV[1]
 
-local method = KEYS[1]
-
-local exposedKey = ARGV[1]
-local userId = ARGV[2]
-local token = ARGV[3]
-
-if method == 'setToken' then
-    return setToken(exposedKey, userId, token)
-elseif method == 'checkToken' then
-    return checkToken(exposedKey, userId, token)
-elseif method == 'deleteToken' then
-    return deleteToken(exposedKey, userId)
+if method == 'acquire' then
+    return acquire(key, ARGV[2])
+elseif method == 'init' then
+    return init(key, ARGV[2], ARGV[3])
+elseif method == 'delete' then
+    return delete(key)
 else
-    return -2; -- Lua方法不存在
+    --ignore
 end
 

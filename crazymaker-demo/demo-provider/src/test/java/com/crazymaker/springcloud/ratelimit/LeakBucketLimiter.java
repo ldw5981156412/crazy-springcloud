@@ -37,7 +37,7 @@ public class LeakBucketLimiter {
             return false;
         }
         //补充上遗漏的场景， 讲课的意义，不断的优化代码
-        //场景三：当前请求和上次请求，在同一个时间区间
+        //场景一：当前请求和上次请求，在同一个时间区间
         long nowTime = System.currentTimeMillis();
         //当前时间，在时间区间之内
         //漏水以时间区间为计算维度，同一个区间，没有必要重复去计算漏水
