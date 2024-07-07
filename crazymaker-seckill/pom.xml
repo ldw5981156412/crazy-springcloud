@@ -2,23 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.crazymaker.springcloud</groupId>
         <artifactId>crazymaker-server</artifactId>
+        <groupId>com.crazymaker.springcloud</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>crazymaker-seckill</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>seckill-api</module>
+        <!--微服务提供模块-->
         <module>seckill-common</module>
-        <module>seckill-client</module>
-        <module>seckill-web</module>
-        <module>stock-provider</module>
         <module>seckill-provider</module>
+        <module>stock-provider</module>
         <module>redission-demo-provider</module>
+        <!--服务端和客户端公共接口-->
+        <module>seckill-api</module>
+        <!--远程客户端模块-->
+        <module>seckill-client</module>
+        <!--web客户端模块-->
+        <module>seckill-web</module>
     </modules>
 
     <!-- 引入 spring-cloud模块 -->

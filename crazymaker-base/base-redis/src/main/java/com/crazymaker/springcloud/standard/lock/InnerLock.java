@@ -50,7 +50,7 @@ public class InnerLock {
             isLocked = false;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException().builder().errMsg("抢锁失败").build();
+            throw BusinessException.builder().errMsg("抢锁失败").build();
         }
     }
 
@@ -70,7 +70,7 @@ public class InnerLock {
             return res != null && res.equals(LOCKED);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException().builder().errMsg("抢锁失败").build();
+            throw BusinessException.builder().errMsg("抢锁失败").build();
         }
     }
 

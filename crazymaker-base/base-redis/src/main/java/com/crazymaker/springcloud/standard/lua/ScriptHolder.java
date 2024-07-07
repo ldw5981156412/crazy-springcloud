@@ -59,6 +59,7 @@ public class ScriptHolder {
             if (StringUtils.isEmpty(script)) {
                 log.error("lua script load failed:" + rateLimitLua);
             } else {
+                //创建 lua 脚本实例
                 rateLimiterScript = new DefaultRedisScript<>(script, Long.class);
             }
         }

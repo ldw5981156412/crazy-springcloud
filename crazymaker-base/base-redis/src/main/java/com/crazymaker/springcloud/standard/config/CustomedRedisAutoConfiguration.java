@@ -1,6 +1,7 @@
 package com.crazymaker.springcloud.standard.config;
 
 import com.crazymaker.springcloud.standard.properties.RedisRateLimitProperties;
+import com.crazymaker.springcloud.standard.ratelimit.RedisRateLimitImpl;
 import com.crazymaker.springcloud.standard.redis.RedisRepository;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -31,7 +32,7 @@ public class CustomedRedisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean({RedisTemplate.class})
-    public RedisTemplate<Object,Object> redisTemplate(RedisConnectionFactory connectionFactory){
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         /*
          * Redis 序列化器.
          *
@@ -61,13 +62,14 @@ public class CustomedRedisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean({StringRedisTemplate.class})
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory){
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
         StringRedisTemplate redisTemplate = new StringRedisTemplate(connectionFactory);
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         redisTemplate.setDefaultSerializer(stringRedisSerializer);
         redisTemplate.setEnableTransactionSupport(false);
         return redisTemplate;
     }
+
     @Bean
     public CacheManager initRedisCacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheManager.RedisCacheManagerBuilder redisCacheManagerBuilder =
@@ -76,7 +78,13 @@ public class CustomedRedisAutoConfiguration {
     }
 
     @Bean
-    public RedisRepository redisRepository(RedisTemplate<Object,Object> redisTemplate){
+    public RedisRepository redisRepository(RedisTemplate<Object, Object> redisTemplate) {
         return new RedisRepository(redisTemplate);
+    }
+
+    @Bean(name = "redisRateLimitImpl")
+    RedisRateLimitImpl redisRateLimitImpl(RedisRateLimitProperties redisRateLimitProperties,
+                                          StringRedisTemplate stringRedisTemplate) {
+        return new RedisRateLimitImpl(redisRateLimitProperties, stringRedisTemplate);
     }
 }

@@ -159,9 +159,7 @@ public class RedisRateLimitImpl implements RateLimitService, InitializingBean {
             if (null == limiterInfos){
                 return;
             }
-            limiterInfos.forEach(limiterInfo -> {
-                initLimitKey(limiterInfo);
-            });
+            limiterInfos.forEach(this::initLimitKey);
             log.info("redis rate limit inited !");
         } catch (Exception e) {
             log.error("redis rate limit  error.....",e);

@@ -79,7 +79,7 @@ public class SeckillSkuStockServiceImpl {
     @CacheEvict(cacheNames = {"seckill"}, key = "'seckillsku:' + #skuId")
     public void delete(Long skuId) {
         seckillSkuDao.deleteById(skuId);
-        //删除就的分段数据
+        //删除旧的分段数据
         seckillSegmentStockDao.deleteStockBySku(skuId);
     }
 
