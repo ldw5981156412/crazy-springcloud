@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
+/**
+ * @author ldw59
+ */
 @Builder
 @Data
 @AllArgsConstructor
-public class BusinessException extends RuntimeException
-{
+public class BusinessException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,13 +36,11 @@ public class BusinessException extends RuntimeException
     @Builder.Default
     private String errMsg = DEFAULT_MSG;
 
-    public BusinessException()
-    {
+    public BusinessException() {
         super(DEFAULT_MSG);
     }
 
-    public BusinessException(String msg)
-    {
+    public BusinessException(String msg) {
         super(msg);
     }
 
@@ -52,10 +52,12 @@ public class BusinessException extends RuntimeException
     public BusinessException(Throwable e) {
         super(e);
     }
+
     /**
      * 带格式设置异常消息
+     *
      * @param format  格式
-     * @param objects  替换的对象
+     * @param objects 替换的对象
      */
     public BusinessException setDetail(String format, Object... objects) {
         format = StringUtils.replace(format, "{}", "%s");
