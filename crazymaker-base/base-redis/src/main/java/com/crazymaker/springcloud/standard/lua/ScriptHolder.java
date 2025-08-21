@@ -31,7 +31,7 @@ public class ScriptHolder {
 
     public static synchronized RedisScript<Long> getLockScript() {
         if (null == lockScript) {
-            String script = IOUtil.loadJarFile(RedisLockService.class.getClassLoader(), seckillLua);
+            String script = IOUtil.loadJarFile(RedisLockService.class.getClassLoader(), lockLua);
             lockScript = new DefaultRedisScript<>(script, Long.class);
         }
         return lockScript;
@@ -42,7 +42,7 @@ public class ScriptHolder {
 
     public static synchronized RedisScript<Long> getUnLockScript() {
         if (null == unLockScript) {
-            String script = IOUtil.loadJarFile(RedisLockService.class.getClassLoader(), seckillLua);
+            String script = IOUtil.loadJarFile(RedisLockService.class.getClassLoader(), unLockLua);
             unLockScript = new DefaultRedisScript<>(script, Long.class);
         }
         return unLockScript;
