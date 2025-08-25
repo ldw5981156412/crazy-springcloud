@@ -16,4 +16,8 @@ public class ThreadUtil {
     public static void sleepMilliSeconds(long millisecond) {
         LockSupport.parkNanos(millisecond * 1000L * 1000L);
     }
+
+    public static void sleepSeconds(int second) {
+        LockSupport.parkNanos(second * 1000L * 1000L * 1000L);
+    }
 }
